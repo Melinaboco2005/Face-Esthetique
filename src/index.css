@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #FDFBF7;
+  --color-primary-100: #FAF6ED;
+  --color-primary-200: #F0E5D1;
+  --color-primary-300: #E2CEAF;
+  --color-primary-400: #D4B88D;
+  --color-primary-500: #C6A16B;
+  --color-primary-600: #A47E4B;
+  --color-primary-700: #825E34;
+  --color-primary-800: #5F4120;
+  --color-primary-900: #4A3525;
+
+  --color-salon-beige: #FCF9F5;
+  --color-salon-text: #2F241D;
+  --color-salon-accent: #8C6A5C;
+  --color-salon-lightAccent: #E8DFD8;
+  --color-salon-gold: #C18C5D;
+  --color-salon-rose: #D6A59E;
+  --color-salon-softBg: #F8F3ED;
+
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', Inter, sans-serif;
+}
+
+body {
+  background-color: var(--color-salon-beige);
+  color: var(--color-salon-text);
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  color: var(--color-primary-900);
+}
+
+/* Hotspot pulse animation */
+@keyframes pulse-dot {
+  0% {
+    transform: scale(0.8);
+    box-shadow: 0 0 0 0 rgba(193, 140, 93, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(193, 140, 93, 0);
+  }
+  100% {
+    transform: scale(0.8);
+    box-shadow: 0 0 0 0 rgba(193, 140, 93, 0);
+  }
+}
+
+.hotspot-pulse {
+  animation: pulse-dot 2s infinite;
+}
