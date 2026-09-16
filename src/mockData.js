@@ -41,7 +41,7 @@ export const initialServices = [
     id: "2",
     name: "Micropigmentation des Lèvres (Lip Blush)",
     category: "visage",
-    image: "public/images/lip_blush_multi.jpg",
+    image: "/images/lip_blush_multi.jpg",
     description: "Redonnez couleur, définition et éclat à vos lèvres en toute élégance.",
     variants: [
       { name: "Lip Blush Naturel", price: 60000, duration: 120, description: "Effet nude naturel pour rehausser la couleur de vos lèvres tout en conservant un rendu doux et frais." },

@@ -89,7 +89,7 @@ export default function About() {
 
           <div className="relative overflow-hidden rounded-2xl shadow-xl aspect-video lg:aspect-auto lg:h-100">
             <img
-              src="public/images/802245299_1585931339578689_1630081412672311993_n.jpg"
+              src="/images/802245299_1585931339578689_1630081412672311993_n.jpg"
               alt="Espace détente de l'institut Face Esthétique"
               className="w-full h-full object-cover"
             />
