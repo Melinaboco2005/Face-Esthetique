@@ -67,7 +67,7 @@ export default function FAQ({ faqList, onAddQuestion }) {
                       className="w-full flex items-center justify-between p-5 text-left font-serif font-bold text-primary-900 focus:outline-none"
                     >
                       <span className="flex items-center gap-3">
-                        <HelpCircle className="w-5 h-5 text-salon-gold flex-shrink-0" />
+                        <HelpCircle className="w-5 h-5 text-salon-gold shrink-0" />
                         {item.question}
                       </span>
                       {isExpanded ? (
@@ -97,7 +97,7 @@ export default function FAQ({ faqList, onAddQuestion }) {
                     Poser une question
                   </h3>
                   <p className="text-xs text-salon-accent leading-relaxed">
-                    Vous avez une question spécifique sur nos prestations ? Écrivez-nous. Hilary vous répondra dans les plus brefs délais.
+                    Vous avez une question spécifique sur nos prestations ? Écrivez-nous. Nous vous répondra dans les plus brefs délais.
                   </p>
                 </div>
 

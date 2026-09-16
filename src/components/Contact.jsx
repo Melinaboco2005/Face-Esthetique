@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { MapPin, Phone, Clock } from 'lucide-react';
 
 export default function Contact({ settings }) {
   return (
@@ -13,7 +13,7 @@ export default function Contact({ settings }) {
           </h2>
           <div className="w-16 h-1 bg-salon-gold mx-auto rounded-full"></div>
           <p className="text-salon-text font-light">
-            Retrouvez-nous au salon ou contactez-nous pour toute demande de renseignements personnalisés.
+            Retrouvez-nous au salon ou contactez-nous pour toute demande de renseignements.
           </p>
         </div>
 
@@ -26,7 +26,7 @@ export default function Contact({ settings }) {
             <div className="space-y-8">
               <div className="space-y-3">
                 <h3 className="text-xl font-bold font-serif text-primary-900 mt-0">Nos coordonnées</h3>
-                <p className="text-xs text-salon-accent font-light">Pour toute question ou demande particulière, vous pouvez nous joindre par téléphone, email ou sur nos réseaux sociaux.</p>
+                <p className="text-xs text-salon-accent font-light">Pour toute question ou demande particulière, vous pouvez nous joindre par téléphone, Snapchat ou sur nos réseaux sociaux.</p>
               </div>
 
               <div className="space-y-4">
@@ -52,11 +52,20 @@ export default function Contact({ settings }) {
 
                 <div className="flex gap-4">
                   <div className="p-3 bg-white border border-salon-lightAccent rounded-xl shadow-sm h-fit">
-                    <Mail className="w-5 h-5 text-salon-gold" />
+                    <svg className="w-5 h-5 fill-salon-gold" viewBox="0 0 24 24">
+                      <path d="M12 2C7.5 2 5 5 5 9v3.5c0 .9-.4 1.7-1.1 2.3l-.7.6c-.5.4-.2 1.2.4 1.2h1.9c.3 1.7 1.8 3 3.6 3h.4c.4 1.2 1.5 2 2.5 2s2.1-.8 2.5-2h.4c1.8 0 3.3-1.3 3.6-3h1.9c.6 0 .9-.8.4-1.2l-.7-.6C18.4 14.2 18 13.4 18 12.5V9c0-4-2.5-7-6-7z"/>
+                    </svg>
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-primary-900">Email</h4>
-                    <p className="text-sm text-salon-text/80 font-light mt-0.5">{settings.email}</p>
+                    <h4 className="text-sm font-bold text-primary-900">Snapchat</h4>
+                    
+                    <a  href={settings.snapchatUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-sm text-salon-text/80 font-light mt-0.5 hover:text-salon-accent transition-colors"
+                    >
+                      fmakeup34
+                    </a>
                   </div>
                 </div>
               </div>
@@ -111,8 +120,8 @@ export default function Contact({ settings }) {
           </div>
 
           {/* Map Area */}
-          <div className="lg:col-span-5 relative w-full h-[350px] bg-white border border-salon-lightAccent rounded-2xl overflow-hidden shadow-sm">
-            <div className="absolute inset-0 bg-[#E8DFD8]/20 flex flex-col items-center justify-center p-6 text-center space-y-4">
+          <div className="lg:col-span-5 relative w-full h-87.5 bg-white border border-salon-lightAccent rounded-2xl overflow-hidden shadow-sm">
+            <div className="absolute inset-0 bg-salon-lightAccent/20 flex flex-col items-center justify-center p-6 text-center space-y-4">
               <MapPin className="w-12 h-12 text-salon-gold animate-bounce" />
               <div className="space-y-1">
                 <h4 className="font-serif font-bold text-primary-900 text-lg">{settings.salonName}</h4>

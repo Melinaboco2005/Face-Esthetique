@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   LogOut, Plus, Trash2, Edit3, Check, X, Shield, ArrowLeft, 
-  HelpCircle, Tag, Sparkles, MessageSquare, Save 
+  HelpCircle, Tag, Sparkles, MessageSquare, Save, Settings, 
 } from 'lucide-react';
 
 export default function AdminDashboard({ 
@@ -21,7 +21,7 @@ export default function AdminDashboard({
 
   // Form States for Service
   const [editingServiceId, setEditingServiceId] = useState(null);
-  const [serviceForm, setServiceForm] = useState({ name: '', price: '', duration: '', description: '', category: '', image: '' });
+  const [serviceForm, setServiceForm] = useState({ name: '', price: '', duration: '', description: '', category: 'visage', image: '' });
   const [isAddingService, setIsAddingService] = useState(false);
 
   // Form States for Promotion
@@ -38,11 +38,11 @@ export default function AdminDashboard({
 
   // Categories list
   const categories = [
-    { id: 'visage', name: 'Soins Visage' },
-    { id: 'corps', name: 'Soins Corps' },
-    { id: 'ongles', name: 'Ongles & Spa' },
-    { id: 'coiffure', name: 'Coiffure' }
-  ];
+    { id: 'visage', name: 'Bien-être' },
+    { id: 'corps', name: 'Soins et Beauté' },
+    { id: 'ongles', name: 'Esthétique Médicale' },
+    { id: 'coiffure', name: 'Formation Professionnelle' }
+  ]; 
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -63,7 +63,15 @@ export default function AdminDashboard({
   // SERVICES CRUD
   const handleEditService = (service) => {
     setEditingServiceId(service.id);
-    setServiceForm({ ...service });
+    // ✅ FIX #1: Pré-remplir COMPLÈTEMENT avec les données existantes
+    setServiceForm({ 
+      name: service.name,
+      price: service.price.toString(),
+      duration: service.duration.toString(),
+      description: service.description,
+      category: service.category,
+      image: service.image || ""
+    });
     setIsAddingService(false);
   };
 
@@ -71,7 +79,14 @@ export default function AdminDashboard({
     e.preventDefault();
     if (editingServiceId) {
       // Edit
-      const updated = services.map(s => s.id === editingServiceId ? { ...serviceForm, price: Number(serviceForm.price), duration: Number(serviceForm.duration) } : s);
+      const updated = services.map(s => s.id === editingServiceId ? { 
+        ...s,
+        ...serviceForm,
+        price: Number(serviceForm.price), 
+        duration: Number(serviceForm.duration),
+        // ✅ FIX #2: Préserver l'image existante si aucune nouvelle n'est fournie
+        image: serviceForm.image || s.image
+      } : s);
       onUpdateServices(updated);
       setEditingServiceId(null);
     } else {
@@ -319,7 +334,7 @@ export default function AdminDashboard({
         </div>
 
         {/* Content Area */}
-        <div className="flex-grow p-6 sm:p-8 space-y-6 overflow-y-auto max-h-[80vh]">
+        <div className="grow p-6 sm:p-8 space-y-6 overflow-y-auto max-h-[80vh]">
           
           {/* TAB 1: SERVICES */}
           {activeSubTab === 'services' && (
@@ -406,12 +421,15 @@ export default function AdminDashboard({
 
                   <div>
                     <label className="block text-[10px] font-bold text-salon-text uppercase tracking-wider mb-1">Image URL (Optionnel)</label>
+                    {/* ✅ FIX #3: Retirer "type='url'" pour accepter les champs vides */}
                     <input 
-                      type="url" placeholder="https://unsplash.com/..."
+                      type="text" 
+                      placeholder="https://unsplash.com/..."
                       value={serviceForm.image}
                       onChange={(e) => setServiceForm({ ...serviceForm, image: e.target.value })}
                       className="w-full px-3 py-2 rounded-lg border border-salon-lightAccent bg-white focus:outline-none text-sm"
                     />
+                    <p className="text-[9px] text-salon-accent mt-1">Laissez vide pour une image par défaut</p>
                   </div>
 
                   <div className="flex justify-end gap-2 pt-2">
@@ -719,14 +737,14 @@ export default function AdminDashboard({
                 <div className="border border-salon-lightAccent rounded-xl bg-white shadow-sm divide-y divide-salon-softBg">
                   {faqList.filter(f => f.answer).map((f) => (
                     <div key={f.id} className="p-5 flex justify-between gap-4 items-start hover:bg-salon-beige/10">
-                      <div className="space-y-2 flex-grow">
+                      <div className="space-y-2 grow">
                         <div className="flex items-center gap-2">
                           <span className={`w-1.5 h-1.5 rounded-full ${f.active ? 'bg-green-500' : 'bg-gray-400'}`}></span>
                           <h5 className="font-serif font-bold text-primary-900 text-sm my-0">{f.question}</h5>
                         </div>
                         <p className="text-xs font-light text-salon-text/80 leading-relaxed pl-3.5">{f.answer}</p>
                       </div>
-                      <div className="flex items-center gap-1.5 flex-shrink-0">
+                      <div className="flex items-center gap-1.5 shrink-0">
                         <button
                           onClick={() => handleToggleFaqActive(f.id)}
                           className="px-2 py-1 border border-salon-lightAccent rounded text-[10px] font-bold text-salon-accent"
@@ -787,11 +805,11 @@ export default function AdminDashboard({
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-salon-text uppercase tracking-wider mb-1">Email professionnel</label>
+                    <label className="block text-xs font-bold text-salon-text uppercase tracking-wider mb-1">Snapchat</label>
                     <input 
-                      type="email" required
-                      value={settingsForm.email}
-                      onChange={(e) => setSettingsForm({ ...settingsForm, email: e.target.value })}
+                      type="text" required
+                      value={settingsForm.snapchatUrl}
+                      onChange={(e) => setSettingsForm({ ...settingsForm, snapchatUrl: e.target.value })}
                       className="w-full px-3 py-2 rounded-lg border border-salon-lightAccent focus:outline-none text-sm"
                     />
                   </div>

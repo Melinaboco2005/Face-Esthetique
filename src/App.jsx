@@ -3,12 +3,13 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
 import Services from './components/Services';
-import Gallery360 from './components/Gallery360';
+import Formations from './components/Formations';
 import Promotions from './components/Promotions';
+import { campagne, promotions as initialPromotions } from './data/promotionsData';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import AdminDashboard from './components/AdminDashboard';
-import { initialServices, initialPromotions, initialFaq, initialSettings } from './mockData';
+import { initialServices, initialFaq, initialSettings } from './mockData';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState('home'); // 'home' | 'admin'
@@ -77,18 +78,19 @@ export default function App() {
   };
 
   return (
+
     <div className="min-h-screen bg-salon-beige font-sans text-salon-text flex flex-col justify-between">
-      
+
       {/* Navigation */}
-      <Navbar 
-        onNavigate={handleNavigate} 
-        currentTab={currentTab} 
+      <Navbar
+        onNavigate={handleNavigate}
+        currentTab={currentTab}
         settings={settings}
       />
 
       {/* Main View Switcher */}
       {currentTab === 'admin' ? (
-        <AdminDashboard 
+        <AdminDashboard
           services={services}
           onUpdateServices={setServices}
           promotions={promotions}
@@ -103,9 +105,9 @@ export default function App() {
         <main className="flex-grow">
           <Hero settings={settings} />
           <About />
+          <Formations/>
           <Services services={services} settings={settings} />
-          <Gallery360 />
-          <Promotions promotions={promotions} />
+          <Promotions promotions={promotions} campagne={campagne} />
           <FAQ faqList={faqList} onAddQuestion={handleAddQuestion} />
           <Contact settings={settings} />
         </main>
@@ -119,13 +121,12 @@ export default function App() {
               {settings.salonName.toUpperCase()}
             </h3>
             <p className="text-xs text-salon-rose/80 font-light mt-1">
-              Institut de Beauté, Soins Visage, Corps & Onglerie
+              Make Up, Soins & Beauté
             </p>
           </div>
 
           <div className="text-xs text-white/70 font-light space-y-1">
             <p>© 2026 {settings.salonName}. Tous droits réservés.</p>
-            <p>Conçu avec soin — Cahier des charges conforme v1.0</p>
           </div>
 
           <div>

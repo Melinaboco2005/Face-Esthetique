@@ -16,15 +16,15 @@ export default function Hero({ settings }) {
   };
 
   const handleWhatsAppClick = () => {
-    const message = encodeURIComponent("Bonjour ! Je souhaite planifier un rendez-vous dans votre salon.");
+    const message = encodeURIComponent("Bonjour ! Je souhaite prendre un rendez-vous dans votre salon.");
     window.open(`https://wa.me/${settings.phone}?text=${message}`, '_blank');
   };
 
   return (
-    <section id="home" className="relative min-height-[90vh] flex items-center justify-center pt-24 pb-16 px-4 bg-gradient-to-br from-[#FAF6F0] via-[#FCF9F5] to-[#F5EFEB] overflow-hidden">
+    <section id="home" className="relative min-height-[90vh] flex items-center justify-center pt-24 pb-16 px-4 bg-linear-to-br from-salon-softBg via-salon-beige to-salon-lightAccent overflow-hidden">
       {/* Decorative background shapes */}
-      <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-salon-rose/5 blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-[-15%] left-[-10%] w-[600px] h-[600px] rounded-full bg-salon-gold/5 blur-3xl pointer-events-none"></div>
+      <div className="absolute top-[-10%] right-[-10%] w-125 h-125 rounded-full bg-salon-rose/5 blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-[-15%] left-[-10%] w-150 h-150 rounded-full bg-salon-gold/5 blur-3xl pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
         
@@ -32,14 +32,15 @@ export default function Hero({ settings }) {
         <div className="lg:col-span-7 text-center lg:text-left space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-salon-rose/10 text-salon-accent text-xs font-bold uppercase tracking-widest">
             <span className="w-1.5 h-1.5 rounded-full bg-salon-rose animate-ping"></span>
-            Votre parenthèse bien-être
+            La Beauté au Pluriel
           </div>
           
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight font-serif text-primary-900">
-            Révélez votre beauté naturelle dans notre <span className="italic text-salon-gold font-normal">écrin de douceur</span>
+            Révélez votre beauté naturelle à <span className="italic text-salon-gold font-normal">Face Esthétique</span>
           </h1>
           
           <p className="text-base sm:text-lg text-salon-text max-w-xl mx-auto lg:mx-0 font-light">
+            FACE ESTHETIQUE est un institut spécialisé dans les métiers de la beauté,
             Découvrez nos soins du visage haute technologie, nos massages enveloppants et notre service d'onglerie d'exception. Un havre de paix conçu pour sublimer votre bien-être.
           </p>
 
@@ -64,23 +65,19 @@ export default function Hero({ settings }) {
 
         {/* Visual Showcase */}
         <div className="lg:col-span-5 relative mt-6 lg:mt-0">
-          <div className="relative w-full max-w-[400px] sm:max-w-[450px] mx-auto">
+          <div className="relative w-full max-w-100 sm:max-w-112.5 mx-auto">
             {/* Elegant double borders / backgrounds */}
             <div className="absolute inset-0 border border-salon-gold rounded-2xl transform translate-x-4 translate-y-4 pointer-events-none"></div>
             
-            <div className="relative overflow-hidden rounded-2xl shadow-2xl border-4 border-white aspect-[3/4]">
+            <div className="relative overflow-hidden rounded-2xl shadow-2xl border-4 border-white aspect-4/3 bg-primary-900">
               <img 
-                src="https://images.unsplash.com/photo-1600334129128-685c5582fd35?q=80&w=800&auto=format&fit=crop" 
-                alt="Ambiance Soin Esthétique" 
-                className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
+                src="public/images/WhatsApp Image 2026-09-03 at 10.44.14 (1).jpeg" 
+                alt="Face Esthétique" 
+                className="w-full h-full object-contain transform hover:scale-105 transition-transform duration-700"
               />
             </div>
             
-            {/* Floating details banner */}
-            <div className="absolute bottom-6 left-[-20px] bg-white p-4 rounded-lg shadow-lg border border-salon-lightAccent max-w-[200px] hidden sm:block">
-              <p className="text-xs text-salon-accent uppercase tracking-widest font-bold mb-1">Salon Pro</p>
-              <p className="text-sm font-serif font-semibold text-primary-900">Élu meilleur institut de beauté local 2026</p>
-            </div>
+          
           </div>
         </div>
 

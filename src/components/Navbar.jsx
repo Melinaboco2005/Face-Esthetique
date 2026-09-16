@@ -7,7 +7,7 @@ export default function Navbar({ onNavigate, currentTab, settings }) {
   const navLinks = [
     { name: "Accueil", href: "#home" },
     { name: "Services", href: "#services" },
-    { name: "Visite 360°", href: "#gallery" },
+    { name: "Formations", href: "#formations" },
     { name: "Offres", href: "#promotions" },
     { name: "FAQ", href: "#faq" },
     { name: "Contact", href: "#contact" }
@@ -29,12 +29,12 @@ export default function Navbar({ onNavigate, currentTab, settings }) {
         <div className="flex justify-between h-20">
           
           {/* Logo */}
-          <div className="flex-shrink-0 flex items-center">
+          <div className="shrink-0 flex items-center">
             <button 
               onClick={() => handleLinkClick('#home')} 
               className="text-left font-serif text-xl sm:text-2xl tracking-widest text-primary-900 font-bold focus:outline-none"
             >
-              L'ÉCRIN DE BEAUTÉ
+              FACE ESTHETIQUE
               <span className="block text-[9px] font-sans tracking-[0.25em] text-salon-gold uppercase font-semibold">Salon d'Esthétique & Spa</span>
             </button>
           </div>

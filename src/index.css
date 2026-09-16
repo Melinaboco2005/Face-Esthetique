@@ -1,24 +1,31 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-50: #FDFBF7;
-  --color-primary-100: #FAF6ED;
-  --color-primary-200: #F0E5D1;
-  --color-primary-300: #E2CEAF;
-  --color-primary-400: #D4B88D;
-  --color-primary-500: #C6A16B;
-  --color-primary-600: #A47E4B;
-  --color-primary-700: #825E34;
-  --color-primary-800: #5F4120;
-  --color-primary-900: #4A3525;
+  /* Échelle rose (du plus clair au plus profond) - domine titres, boutons, fonds */
+  --color-primary-50: #FFF5F9;
+  --color-primary-100: #FCE1EC;
+  --color-primary-200: #F7B8D2;
+  --color-primary-300: #F08FB6;
+  --color-primary-400: #E85999;
+  --color-primary-500: #D62E7D;
+  --color-primary-600: #A1145A;
+  --color-primary-700: #7A0E42;
+  --color-primary-800: #5C0A33;
+  --color-primary-900: #3D0722;
 
-  --color-salon-beige: #FCF9F5;
-  --color-salon-text: #2F241D;
-  --color-salon-accent: #8C6A5C;
-  --color-salon-lightAccent: #E8DFD8;
-  --color-salon-gold: #C18C5D;
-  --color-salon-rose: #D6A59E;
-  --color-salon-softBg: #F8F3ED;
+  /* Palette salon : rose dominant, blanc, noir (texte) et or en petite touche */
+  --color-salon-beige: #FFF5F9;
+  --color-salon-text: #171717;
+  --color-salon-accent: #D62E7D;
+  --color-salon-lightAccent: #F7B8D2;
+  --color-salon-gold: #D4A017;
+  --color-salon-rose: #E31C71;
+  --color-salon-softBg: #FCE1EC;
+
+  /* Dégradés prêts à l'emploi, calés sur le logo et la charte */
+  --gradient-gold: linear-gradient(135deg, #FBEFCB 0%, #E3AC1B 50%, #8A670C 100%);
+  --gradient-rose: linear-gradient(135deg, #F7B8D2 0%, #E31C71 50%, #7A0E42 100%);
+  --gradient-hero: linear-gradient(135deg, #FFF5F9 0%, #FCE1EC 50%, #F7B8D2 100%);
 
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', Inter, sans-serif;
@@ -39,15 +46,15 @@ h1, h2, h3, h4, h5, h6 {
 @keyframes pulse-dot {
   0% {
     transform: scale(0.8);
-    box-shadow: 0 0 0 0 rgba(193, 140, 93, 0.7);
+    box-shadow: 0 0 0 0 rgba(212, 160, 23, 0.7);
   }
   70% {
     transform: scale(1);
-    box-shadow: 0 0 0 10px rgba(193, 140, 93, 0);
+    box-shadow: 0 0 0 10px rgba(212, 160, 23, 0);
   }
   100% {
     transform: scale(0.8);
-    box-shadow: 0 0 0 0 rgba(193, 140, 93, 0);
+    box-shadow: 0 0 0 0 rgba(212, 160, 23, 0);
   }
 }
 
