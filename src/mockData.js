@@ -43,7 +43,7 @@ export const initialServices = [
     id: "2",
     name: "Micropigmentation des Lèvres (Lip Blush)",
     category: "visage",
-    image: "/images/lip_blush_multi.jpg",
+    image: "/images/lip_blush.jpg",
     description: "Redonnez couleur, définition et éclat à vos lèvres en toute élégance.",
     variants: [
       { name: "Lip Blush Naturel", price: 60000, duration: 120, description: "Effet nude naturel pour rehausser la couleur de vos lèvres tout en conservant un rendu doux et frais." },
@@ -128,7 +128,7 @@ export const initialServices = [
     variants: [
       { name: "Sourcils", price: 5000, duration: null, description: "Épilation précise pour un regard net et structuré." },
       { name: "Moustache", price: 5000, duration: null, description: "Épilation douce de la zone de la moustache." },
-       { name: "Maillot Intégral Pubis", price: 20000, duration: null, description: "Pour une hygiène parfaite et un confort optimal." },     
+      { name: "Maillot Intégral Pubis", price: 20000, duration: null, description: "Pour une hygiène parfaite et un confort optimal." },     
       { name: "Visage", price: 15000, duration: null, description: "Sourcils, lèvres, menton, joues... pour un visage net et lumineux." },
       { name: "Aisselle", price: 10000, duration: null, description: "Douce et efficace, pour une sensation de fraîcheur durable." },
       { name: "Aisselles + Soin", price: 15000, duration: null, description: "Épilation des aisselles complétée d'un soin apaisant." },
