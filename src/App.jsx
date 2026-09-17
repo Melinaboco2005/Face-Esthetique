@@ -105,8 +105,6 @@ export default function App() {
           <About />
           <Formations/>
           <Services services={services} settings={settings} />
-          <Gallery360 />
-          <Promotions promotions={promotions} campagne={campagne} />
           <FAQ faqList={faqList} onAddQuestion={handleAddQuestion} />
           <Contact settings={settings} />
         </main>
