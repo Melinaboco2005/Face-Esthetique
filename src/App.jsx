@@ -93,8 +93,6 @@ export default function App() {
         <AdminDashboard
           services={services}
           onUpdateServices={setServices}
-          promotions={promotions}
-          onUpdatePromotions={setPromotions}
           faqList={faqList}
           onUpdateFaq={setFaqList}
           settings={settings}

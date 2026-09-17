@@ -210,3 +210,27 @@ export const initialServices = [
   },
 
 ];
+export const initialFaq = [
+  {
+    id: "f1",
+    question: "Quels types de vernis utilisez-vous pour les ongles ?",
+    answer: "Nous utilisons exclusivement des vernis professionnels longue tenue et semi-permanents des marques OPI et Gelish, garantissant brillance et protection de l'ongle.",
+    dateSubmitted: "2026-08-20",
+    active: true
+  },
+  {
+    id: "f2",
+    question: "Dois-je réserver à l'avance pour une simple manucure ?",
+    answer: "Il est fortement recommandé de réserver au moins 24 heures à l'avance afin de vous garantir une place au créneau horaire souhaité, même pour des prestations rapides.",
+    dateSubmitted: "2026-08-22",
+    active: true
+  },
+  {
+    id: "f3",
+    question: "Proposez-vous des massages pour femmes enceintes ?",
+    answer: "Oui, nous proposons un massage prénatal spécifiquement adapté pour soulager les tensions et s'adapter aux besoins de la future maman à partir du 4ème mois de grossesse.",
+    dateSubmitted: "2026-08-24",
+    active: true
+  }
+];
+ 
