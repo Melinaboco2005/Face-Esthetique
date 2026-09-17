@@ -8,7 +8,6 @@ export default function Navbar({ onNavigate, currentTab, settings }) {
     { name: "Accueil", href: "#home" },
     { name: "Services", href: "#services" },
     { name: "Formations", href: "#formations" },
-    { name: "Offres", href: "#promotions" },
     { name: "FAQ", href: "#faq" },
     { name: "Contact", href: "#contact" }
   ];

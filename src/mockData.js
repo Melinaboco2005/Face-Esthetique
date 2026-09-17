@@ -27,14 +27,16 @@ export const initialServices = [
     image: "/images/soins_du_visage.jpg",
     description: "Une gamme complète de soins ciblés et personnalisés pour révéler votre beauté naturelle.",
     variants: [
-      { name: "Soin Éclat", price: null, duration: null, description: "Nettoie, purifie et ravive l'éclat naturel de votre peau." },
-      { name: "Hydrafacial", price: null, duration: null, description: "Hydratation en profondeur pour une peau douce, lisse et lumineuse." },
-      { name: "Soin Anti-Âge", price: null, duration: null, description: "Lutte contre les signes du vieillissement et raffermit la peau." },
-      { name: "Peeling", price: null, duration: null, description: "Exfolie en douceur, élimine les imperfections et unifie le teint." },
-      { name: "Soin à la Vitamine C", price: null, duration: null, description: "Illumine le teint, réduit les taches et booste l'éclat." },
-      { name: "Soin au Collagène", price: null, duration: null, description: "Nourrit, hydrate et redonne fermeté et élasticité à la peau." },
-      { name: "Dermaplaning", price: null, duration: null, description: "Élimine les cellules mortes et le duvet pour un teint net et éclatant." },
-      { name: "Traitement Acné Sévère", price: null, duration: null, description: "Purifie, apaise et aide à réduire durablement l'acné." }
+      { name: "Soin du Visage Éclat", price: 15000, duration: null, description: "Illumine le teint, hydrate et redonne de l'éclat à la peau." },
+      { name: "Soin du Visage Hydrafacial", price: 18000, duration: null, description: "Nettoie en profondeur, hydrate et revitalise la peau." },
+      { name: "Soin Anti-Âge", price: 25000, duration: null, description: "Réduit les rides, raffermit et redonne jeunesse à la peau." },
+      { name: "Soin Peeling", price: 17000, duration: null, description: "Exfolie en douceur, élimine les cellules mortes et affine le grain de peau." },
+      { name: "Soin à la Vitamine C", price: 17000, duration: null, description: "Booste l'éclat, unifie le teint et protège contre les signes du temps." },
+      { name: "Soin au Collagène", price: 20000, duration: null, description: "Hydrate intensément, améliore l'élasticité et la fermeté de la peau." },
+      { name: "Soin du Visage associé au Dermaplaning", price: 18000, duration: null, description: "Exfolie, élimine le duvet et les peaux mortes pour un teint lisse et lumineux." },
+      { name: "Traitement Acné Sévère", price: 20000, duration: null, description: "Réduit l'inflammation, combat les imperfections et purifie la peau en profondeur." },
+      { name: "Abonnement Soin Éclat (4 séances)", price: 50000, duration: null, description: "Pour une peau lumineuse et éclatante toute l'année." },
+      { name: "Abonnement Soin Acnés/Boutons (4 séances)", price: 70000, duration: null, description: "Pour une peau nette, saine et sans imperfections." }
     ]
   },
   {
@@ -83,16 +85,21 @@ export const initialServices = [
     image: "/images/massages.jpg",
     description: "Offrez à votre corps le soin qu'il mérite : détente, relaxation et harmonie, pour homme, femme ou en duo.",
     variants: [
-      { name: "Massage Relaxant", price: null, duration: null, description: "Réduit le stress et l'anxiété, favorise un moment de détente profonde." },
-      { name: "Massage Californien", price: null, duration: null, description: "Mouvements amples et enveloppants pour un lâcher-prise total." },
-      { name: "Massage Tonique", price: null, duration: null, description: "Stimule la circulation et redonne du tonus au corps." },
-      { name: "Massage Oriental", price: null, duration: null, description: "Un rituel inspiré des traditions orientales pour l'harmonie du corps et de l'esprit." },
-      { name: "Réflexologie", price: null, duration: null, description: "Travail ciblé sur les points réflexes des pieds pour un bien-être global." },
-      { name: "Massage Plantaire", price: null, duration: null, description: "Soulage les tensions accumulées dans les pieds." },
-      { name: "Massage aux Huiles Chaudes", price: null, duration: null, description: "La chaleur des huiles détend profondément les muscles." },
-      { name: "Massage aux Pierres Chaudes", price: null, duration: null, description: "Les pierres chaudes relâchent les tensions musculaires en profondeur." },
-      { name: "Drainage Lymphatique", price: null, duration: null, description: "Améliore la circulation sanguine et lymphatique." },
-      { name: "Massage Duo (Couples)", price: null, duration: null, description: "Un moment de détente partagé, à deux." }
+      { name: "Massage Relaxant", price: 15000, duration: null, description: "Détend les muscles, réduit le stress et procure une relaxation profonde." },
+      { name: "Massage Crânien", price: 10000, duration: null, description: "Soulage les tensions, stimule la circulation et apaise l'esprit." },
+      { name: "Massage Réflexologie", price: 17000, duration: null, description: "Stimule les points réflexes et rééquilibre les fonctions du corps." },
+      { name: "Massage Californien", price: 17000, duration: null, description: "Mouvements doux et enveloppants pour une relaxation totale." },
+      { name: "Massage Tonique", price: 20000, duration: null, description: "Tonifie les muscles, redonne énergie et vitalité au corps." },
+      { name: "Massage Oriental", price: 25000, duration: null, description: "Techniques inspirées des traditions orientales pour un lâcher-prise absolu." },
+      { name: "Massage Plantaire", price: 8000, duration: null, description: "Soulage la fatigue, améliore la circulation et procure un bien-être global." },
+      { name: "Massage Relaxant Premium", price: 20000, duration: 60, description: "Massage profond favorisant la détente musculaire, la réduction du stress et le bien-être général." },
+      { name: "Massage Sensoriel", price: 25000, duration: 60, description: "Des mouvements lents et enveloppants pour une relaxation profonde dans une ambiance apaisante." },
+      { name: "Massage aux Huiles Chaudes", price: 20000, duration: 60, description: "Des huiles tièdes associées à des manœuvres relaxantes pour nourrir la peau et dénouer les tensions." },
+      { name: "Massage aux Pierres Chaudes", price: 30000, duration: 60, description: "Des pierres volcaniques chauffées diffusent une chaleur profonde pour détendre les muscles et éliminer le stress." },
+      { name: "Massage Signature Face Esthétique", price: 35000, duration: 90, description: "Notre soin exclusif combinant sauna et plusieurs techniques de massage pour une expérience de bien-être complète." },
+      { name: "Massage Duo (Couples)", price: 50000, duration: 90, description: "Une séance de relaxation réalisée en simultané pour deux personnes dans une ambiance romantique et apaisante." },
+      { name: "Massage Sensuel (Femmes)", price: 40000, duration: 40, description: "Une invitation à la détente et à la reconnexion avec soi-même, aux huiles chaudes parfumées. Séance réservée aux femmes." },
+      { name: "Drainage Lymphatique", price: null, duration: null, description: "Améliore la circulation sanguine et lymphatique." }
     ]
   },
   {
@@ -102,11 +109,14 @@ export const initialServices = [
     image: "/images/gommage_traditionnelle.jpg",
     description: "Exfolie, purifie et sublime la peau pour un résultat doux, net et éclatant.",
     variants: [
-      { name: "Gommage Traditionnel", price: 30000, duration: 90, description: "Exfoliation en profondeur, bain traditionnel purifiant et hydratation pour une douceur incomparable." },
-      { name: "Gommage Éclat", price: 25000, duration: 60, description: "Élimine les cellules mortes, affine le grain de peau et ravive l'éclat naturel." },
-      { name: "Gommage Éclaircissant", price: 25000, duration: 60, description: "Unifie le teint, atténue les taches et imperfections pour une peau visiblement plus claire." },
-      { name: "Gommage Tonifiant", price: 25000, duration: 60, description: "Stimule la circulation sanguine, raffermit la peau et redonne tonus et vitalité au corps." },
-      { name: "Gommage à la Vapeur", price: 25000, duration: 60, description: "Ouvre les pores en douceur, facilite l'élimination des impuretés et laisse la peau revitalisée." }
+      { name: "Gommage Éclat", price: 25000, duration: 60, description: "Élimine les cellules mortes, ravive l'éclat naturel de la peau." },
+      { name: "Gommage Éclat + Sauna + Hydratation", price: 35000, duration: null, description: "Exfolie, purifie en profondeur et hydrate intensément." },
+      { name: "Gommage Éclaircissant", price: 35000, duration: null, description: "Aide à unifier le teint, atténue les taches et illumine la peau." },
+      { name: "Gommage Tonifiant", price: 30000, duration: null, description: "Stimule la circulation, raffermit et tonifie la peau." },
+      { name: "Gommage Éclat à la Vapeur", price: 35000, duration: null, description: "Ouvre les pores, détoxifie et révèle un teint lumineux." },
+      { name: "Gommage au Grain Fin", price: 30000, duration: null, description: "Exfolie en douceur, lisse le grain de peau et procure une douceur soyeuse." },
+      { name: "Gommage Traditionnel", price: 30000, duration: 90, description: "À base d'ingrédients naturels (plantes, huiles, épices), nettoie en profondeur, nourrit et revitalise la peau." },
+      { name: "Gommage Molato au Sauna", price: 35000, duration: null, description: "Nourrit, adoucit et éclaire la peau tout en offrant une détente profonde." }
     ]
   },
   {
@@ -114,28 +124,36 @@ export const initialServices = [
     name: "Épilations",
     category: "corps",
     image: "/images/epilations.jpg",
-    description: "Douceur, propreté et confort — une peau lisse, nette et soyeuse longue durée.",
+    description: "Douceur, propreté et confort — une peau lisse, nette et soyeuse longue durée, pour elle et pour lui.",
     variants: [
-      { name: "Épilation Visage", price: null, duration: null, description: "Sourcils, lèvres, menton, joues... pour un visage net et lumineux." },
-      { name: "Épilation Aisselles", price: null, duration: null, description: "Douce et efficace, pour une sensation de fraîcheur durable." },
-      { name: "Épilation Maillot Intégral", price: null, duration: null, description: "Pour une hygiène parfaite et un confort optimal." },
-      { name: "Épilation Jambes", price: null, duration: null, description: "Des jambes douces et soyeuses plus longtemps." },
-      { name: "Épilation Corps", price: null, duration: null, description: "Bras, dos, ventre, torse, fesses... pour une peau lisse de la tête aux pieds." },
-      { name: "Épilation Fesse + Sillon Fessier", price: null, duration: null, description: "Pour une finition impeccable et une hygiène parfaite." }
+      { name: "Sourcils", price: 5000, duration: null, description: "Épilation précise pour un regard net et structuré." },
+      { name: "Moustache", price: 5000, duration: null, description: "Épilation douce de la zone de la moustache." },
+       { name: "Maillot Intégral Pubis", price: 20000, duration: null, description: "Pour une hygiène parfaite et un confort optimal." },     
+      { name: "Visage", price: 15000, duration: null, description: "Sourcils, lèvres, menton, joues... pour un visage net et lumineux." },
+      { name: "Aisselle", price: 10000, duration: null, description: "Douce et efficace, pour une sensation de fraîcheur durable." },
+      { name: "Aisselles + Soin", price: 15000, duration: null, description: "Épilation des aisselles complétée d'un soin apaisant." },
+      { name: "Menton à la Cire", price: 10000, duration: null, description: "Épilation précise du menton à la cire." },
+      { name: "Jambes", price: 30000, duration: null, description: "Des jambes douces et soyeuses plus longtemps." },
+      { name: "Demi Jambes", price: 15000, duration: null, description: "Épilation de la moitié des jambes." },
+      { name: "Jambes et Bras", price: 50000, duration: null, description: "Épilation complète des jambes et des bras." },
+      { name: "Torse", price: 30000, duration: null, description: "Épilation du torse pour une peau nette." },
+      { name: "Corps Entier", price: 80000, duration: null, description: "Bras, dos, ventre, torse, fesses... pour une peau lisse de la tête aux pieds." },
+      { name: "Fesse + Sillon Fessier", price: 35000, duration: null, description: "Pour une finition impeccable et une hygiène parfaite." },
+      { name: "Soin Fessier", price: 25000, duration: null, description: "Un soin pour des fesses lisses, éclatantes et uniformes." }
     ]
   },
   {
     id: "8",
-    name: "Bains de Sièges",
+    name: "Bains de Sièges (Yoni Steam)",
     category: "intimite",
     image: "/images/bain_de_siege.jpg",
-    description: "Un rituel ancestral pour votre bien-être — intimité saine, corps léger, esprit apaisé.",
+    description: "Un rituel ancestral pour votre bien-être — intimité saine, corps léger, esprit apaisé. Soin bien-être 100% féminin.",
     variants: [
-      { name: "Bain Relaxant", price: null, duration: null, description: "Apaise le stress, les tensions et favorise une profonde détente." },
-      { name: "Bain Détox", price: null, duration: null, description: "Élimine les toxines, débarrasse les odeurs indésirables et assainit la zone intime." },
-      { name: "Bain Équilibre Féminin", price: null, duration: null, description: "Régule le cycle menstruel, équilibre le pH et renforce la santé intime." },
-      { name: "Bain Post-Menstruel", price: null, duration: null, description: "Nettoie et régénère après les règles, apaise et prévient les inconforts." },
-      { name: "Bain Premium Spa", price: null, duration: null, description: "Expérience complète de bien-être pour une sensation de fraîcheur et de luxe." }
+      { name: "Bain Relaxant", price: 10000, duration: null, description: "Plantes apaisantes pour un moment de détente et de relaxation profonde." },
+      { name: "Bain Détox", price: 12000, duration: null, description: "Plantes purifiantes pour aider à éliminer les impuretés et retrouver une sensation de légèreté." },
+      { name: "Bain Équilibre Féminin", price: 12000, duration: null, description: "Plantes sélectionnées pour favoriser l'équilibre, le confort intime et la fraîcheur." },
+      { name: "Bain Post-Menstruel", price: 15000, duration: null, description: "Idéal après les règles pour une sensation de propreté, de confort et de bien-être." },
+      { name: "Bain Premium Spa", price: 20000, duration: null, description: "Expérience haut de gamme avec plantes premium, aromathérapie et ambiance relaxante." }
     ]
   },
   {
@@ -157,7 +175,7 @@ export const initialServices = [
     image: "/images/pericial_intimite.jpg",
     price: 40000,
     duration: null,
-    description: "Le Penocial : purifie, traite les imperfections, apaise la peau et révèle une propreté irréprochable. Sur rendez-vous uniquement."
+    description: "Le Vajacial masculin : purifie, traite les imperfections, apaise la peau et révèle une propreté irréprochable. Sur rendez-vous uniquement."
   },
   {
     id: "11",
@@ -166,11 +184,13 @@ export const initialServices = [
     image: "/images/pedicure_manicure_multi.jpg",
     description: "Des soins complets pour révéler la beauté jusqu'au bout des ongles.",
     variants: [
-      { name: "Pédicure Russe", price: 25000, duration: 60, description: "Soin précis et minutieux des pieds, pour des ongles parfaitement nets et une finition impeccable." },
-      { name: "Pédicure Simple", price: 25000, duration: 60, description: "Soin essentiel pour des pieds propres, ongles soignés et une sensation de légèreté au quotidien." },
-      { name: "Manucure Simple", price: 18000, duration: 45, description: "Soin des mains complet, cuticules soignées, ongles en forme et éclat naturel garanti." },
-      { name: "Nettoyage des Ongles + Vernis", price: 18000, duration: 45, description: "Nettoyage en profondeur et mise en beauté avec un vernis longue tenue et brillant." },
-      { name: "Jelly Pédicure Manucure Spa", price: null, duration: null, description: "Rituel relaxant et hydratant à la jelly, pour des pieds et mains doux, parfumés et éclatants." }
+      { name: "Pédicure Manucure (Combo)", price: 12000, duration: null, description: "Soin complet des mains et des pieds pour une beauté parfaite." },
+      { name: "Jelly Pédicure Manucure Spa", price: 20000, duration: null, description: "Soin relaxant et hydratant à la jelly pour des mains et pieds doux et éclatants." },
+      { name: "Jelly Pédicure Spa", price: 12000, duration: null, description: "Soin des pieds à la jelly pour hydrater, adoucir et rafraîchir." },
+      { name: "Pédicure Russe", price: 15000, duration: null, description: "Technique professionnelle pour des pieds nets et des ongles parfaitement soignés." },
+      { name: "Pédicure Simple", price: 7000, duration: null, description: "Soin de base pour des pieds propres, doux et soignés." },
+      { name: "Manucure Simple", price: 5000, duration: null, description: "Soin de base pour des mains propres et des ongles soignés." },
+      { name: "Nettoyage des Ongles + Vernis", price: 3000, duration: null, description: "Nettoyage des ongles et pose de vernis semi-permanent." }
     ]
   },
   {
@@ -182,7 +202,7 @@ export const initialServices = [
     duration: null,
     description: "Ouvre les pores, élimine les toxines, active la circulation et prépare le corps avant un soin corporel, pour des résultats optimisés."
   },
-
+ 
 ];
 
 export const initialFaq = [

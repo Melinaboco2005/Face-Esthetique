@@ -71,7 +71,7 @@ export default function Hero({ settings }) {
             
             <div className="relative overflow-hidden rounded-2xl shadow-2xl border-4 border-white aspect-4/3 bg-primary-900">
               <img 
-                src="public/images/WhatsApp Image 2026-09-03 at 10.44.14 (1).jpeg" 
+                src="/images/logo.jpg" 
                 alt="Face Esthétique" 
                 className="w-full h-full object-contain transform hover:scale-105 transition-transform duration-700"
               />

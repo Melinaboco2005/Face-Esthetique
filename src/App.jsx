@@ -4,8 +4,6 @@ import Hero from './components/Hero';
 import About from './components/About';
 import Services from './components/Services';
 import Formations from './components/Formations';
-import Promotions from './components/Promotions';
-import { campagne, promotions as initialPromotions } from './data/promotionsData';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import AdminDashboard from './components/AdminDashboard';
@@ -39,10 +37,6 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('salon_services', JSON.stringify(services));
   }, [services]);
-
-  useEffect(() => {
-    localStorage.setItem('salon_promotions', JSON.stringify(promotions));
-  }, [promotions]);
 
   useEffect(() => {
     localStorage.setItem('salon_faq', JSON.stringify(faqList));
@@ -107,7 +101,6 @@ export default function App() {
           <About />
           <Formations/>
           <Services services={services} settings={settings} />
-          <Promotions promotions={promotions} campagne={campagne} />
           <FAQ faqList={faqList} onAddQuestion={handleAddQuestion} />
           <Contact settings={settings} />
         </main>
