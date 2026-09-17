@@ -7,21 +7,25 @@ import Formations from './components/Formations';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import AdminDashboard from './components/AdminDashboard';
-import { initialServices, initialFaq, initialSettings } from './mockData';
+import { initialServices, initialFaq, initialSettings, servicesVersion } from './mockData';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState('home'); // 'home' | 'admin'
 
   // Persistent State with LocalStorage
+  // Chaque state versionné compare la version stockée à la version actuelle
+  // du fichier de données. Si elles diffèrent (car vous avez modifié un prix
+  // ou un service), l'ancienne sauvegarde du navigateur est ignorée et les
+  // nouvelles données de référence sont utilisées à la place.
   const [services, setServices] = useState(() => {
+    const savedVersion = localStorage.getItem('salon_services_version');
     const saved = localStorage.getItem('salon_services');
-    return saved ? JSON.parse(saved) : initialServices;
+    if (saved && savedVersion === servicesVersion) {
+      return JSON.parse(saved);
+    }
+    return initialServices;
   });
 
-  const [promotions, setPromotions] = useState(() => {
-    const saved = localStorage.getItem('salon_promotions');
-    return saved ? JSON.parse(saved) : initialPromotions;
-  });
 
   const [faqList, setFaqList] = useState(() => {
     const saved = localStorage.getItem('salon_faq');
@@ -36,7 +40,9 @@ export default function App() {
   // Sync state to LocalStorage
   useEffect(() => {
     localStorage.setItem('salon_services', JSON.stringify(services));
+    localStorage.setItem('salon_services_version', servicesVersion);
   }, [services]);
+
 
   useEffect(() => {
     localStorage.setItem('salon_faq', JSON.stringify(faqList));
@@ -101,6 +107,8 @@ export default function App() {
           <About />
           <Formations/>
           <Services services={services} settings={settings} />
+          <Gallery360 />
+          <Promotions promotions={promotions} campagne={campagne} />
           <FAQ faqList={faqList} onAddQuestion={handleAddQuestion} />
           <Contact settings={settings} />
         </main>
@@ -136,3 +144,4 @@ export default function App() {
     </div>
   );
 }
+

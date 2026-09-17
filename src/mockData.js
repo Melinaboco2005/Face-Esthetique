@@ -1,5 +1,11 @@
 // Données initiales du site vitrine et du Back-Office
 
+// Incrémentez cette valeur à CHAQUE fois que vous modifiez un prix, un nom
+// ou une description dans initialServices. Cela force tous les navigateurs
+// (le vôtre et ceux de vos visiteurs) à recharger les données à jour au lieu
+// de garder leur ancienne copie enregistrée dans le localStorage.
+export const servicesVersion = '2026-09-17-1';
+
 export const initialSettings = {
   salonName: "Face Esthétique",
   phone: "22966224021",
@@ -128,7 +134,7 @@ export const initialServices = [
     variants: [
       { name: "Sourcils", price: 5000, duration: null, description: "Épilation précise pour un regard net et structuré." },
       { name: "Moustache", price: 5000, duration: null, description: "Épilation douce de la zone de la moustache." },
-      { name: "Maillot Intégral Pubis", price: 20000, duration: null, description: "Pour une hygiène parfaite et un confort optimal." },     
+      { name: "Maillot Intégral Pubis", price: 20000, duration: null, description: "Pour une hygiène parfaite et un confort optimal." },
       { name: "Visage", price: 15000, duration: null, description: "Sourcils, lèvres, menton, joues... pour un visage net et lumineux." },
       { name: "Aisselle", price: 10000, duration: null, description: "Douce et efficace, pour une sensation de fraîcheur durable." },
       { name: "Aisselles + Soin", price: 15000, duration: null, description: "Épilation des aisselles complétée d'un soin apaisant." },
@@ -202,30 +208,5 @@ export const initialServices = [
     duration: null,
     description: "Ouvre les pores, élimine les toxines, active la circulation et prépare le corps avant un soin corporel, pour des résultats optimisés."
   },
- 
-];
 
-export const initialFaq = [
-  {
-    id: "f1",
-    question: "Quels types de vernis utilisez-vous pour les ongles ?",
-    answer: "Nous utilisons exclusivement des vernis professionnels longue tenue et semi-permanents des marques OPI et Gelish, garantissant brillance et protection de l'ongle.",
-    dateSubmitted: "2026-08-20",
-    active: true
-  },
-  {
-    id: "f2",
-    question: "Dois-je réserver à l'avance pour une simple manucure ?",
-    answer: "Il est fortement recommandé de réserver au moins 24 heures à l'avance afin de vous garantir une place au créneau horaire souhaité, même pour des prestations rapides.",
-    dateSubmitted: "2026-08-22",
-    active: true
-  },
-  {
-    id: "f3",
-    question: "Proposez-vous des massages pour femmes enceintes ?",
-    answer: "Oui, nous proposons un massage prénatal spécifiquement adapté pour soulager les tensions et s'adapter aux besoins de la future maman à partir du 4ème mois de grossesse.",
-    dateSubmitted: "2026-08-24",
-    active: true
-  }
 ];
-
