@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Clock, Phone, X, AlertCircle, Check } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Clock, Phone, X, AlertCircle, Check, ShoppingBag, Trash2 } from 'lucide-react';
 
 // Couleurs par type de service
 const CATEGORY_STYLES = {
@@ -31,11 +31,33 @@ const DEFAULT_CATEGORY_STYLE = {
   dot: 'bg-salon-softBg',
 };
 
+// Clé unique pour un item de panier : une prestation simple => "id::base",
+// une variante précise d'une prestation => "id::indexDeLaVariante"
+const getItemKey = (serviceId, variantIndex = 'base') => `${serviceId}::${variantIndex}`;
+
 export default function Services({ services, settings }) {
   const [activeCategory, setActiveCategory] = useState('all');
-  const [selectedService, setSelectedService] = useState(null);
   const [detailService, setDetailService] = useState(null);
-  const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
+
+  // Panier de sélection : chaque entrée = { key, serviceId, serviceName, itemLabel, price, duration }
+  // Persisté dans le navigateur du client pour survivre à un rafraîchissement de page.
+  const [cart, setCart] = useState(() => {
+    try {
+      const saved = localStorage.getItem('salon_cart');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('salon_cart', JSON.stringify(cart));
+    } catch {
+      // Stockage indisponible (navigation privée, quota plein...) : on ignore silencieusement.
+    }
+  }, [cart]);
 
   const [visitorName, setVisitorName] = useState('');
   const [bookingDate, setBookingDate] = useState('');
@@ -68,57 +90,120 @@ export default function Services({ services, settings }) {
     return formatCurrency(service.price);
   };
 
+  // --- Gestion du panier ---
+
+  const isInCart = (key) => cart.some((item) => item.key === key);
+
+  const countInCart = (serviceId) => cart.filter((item) => item.serviceId === serviceId).length;
+
+  const toggleVariant = (service, variantIndex) => {
+    const key = getItemKey(service.id, variantIndex);
+    setCart((prev) => {
+      if (prev.some((item) => item.key === key)) {
+        return prev.filter((item) => item.key !== key);
+      }
+      const variant = service.variants[variantIndex];
+      return [
+        ...prev,
+        {
+          key,
+          serviceId: service.id,
+          serviceName: service.name,
+          itemLabel: variant.name,
+          price: variant.price,
+          duration: variant.duration,
+        },
+      ];
+    });
+  };
+
+  const toggleBaseService = (service) => {
+    const key = getItemKey(service.id);
+    setCart((prev) => {
+      if (prev.some((item) => item.key === key)) {
+        return prev.filter((item) => item.key !== key);
+      }
+      return [
+        ...prev,
+        {
+          key,
+          serviceId: service.id,
+          serviceName: service.name,
+          itemLabel: null,
+          price: service.price,
+          duration: service.duration,
+        },
+      ];
+    });
+  };
+
+  const removeFromCart = (key) => {
+    setCart((prev) => prev.filter((item) => item.key !== key));
+  };
+
+  const cartTotal = useMemo(
+    () => cart.reduce((sum, item) => sum + (item.price || 0), 0),
+    [cart]
+  );
+
+  const hasQuoteOnlyItems = cart.some((item) => !item.price);
+
+  // --- Fiche détail ---
+
   const handleOpenDetail = (service) => {
     setDetailService(service);
-    setSelectedVariantIndex(0);
   };
 
   const handleCloseDetail = () => {
     setDetailService(null);
   };
 
-  const buildBookingTarget = (service, variantIndex = null) => {
-    if (service.variants && service.variants.length > 0) {
-      const variant = service.variants[variantIndex ?? 0];
-      return {
-        name: `${service.name} — ${variant.name}`,
-        price: variant.price,
-        duration: variant.duration,
-      };
-    }
-    return { name: service.name, price: service.price, duration: service.duration };
-  };
+  // --- Panier / Réservation ---
 
-  const handleOpenBooking = (service, variantIndex = null) => {
-    setSelectedService(buildBookingTarget(service, variantIndex));
-    setIsSubmitted(false);
-    setVisitorName('');
-    setBookingDate('');
-    setBookingTime('');
-  };
-
-  const handleCloseBooking = () => {
-    setSelectedService(null);
-  };
-
-  const handleBookFromDetail = () => {
-    const service = detailService;
+  const handleOpenCart = () => {
     setDetailService(null);
-    handleOpenBooking(service, service.variants ? selectedVariantIndex : null);
+    setIsCartOpen(true);
+  };
+
+  const handleCloseCart = () => {
+    setIsCartOpen(false);
+    setIsSubmitted(false);
   };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (!visitorName || !bookingDate || !bookingTime) return;
+    if (!visitorName || !bookingDate || !bookingTime || cart.length === 0) return;
 
-    const dateFormatted = new Date(bookingDate).toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    const priceSegment = selectedService.price ? ` (${formatCurrency(selectedService.price)})` : '';
+    const dateFormatted = new Date(bookingDate).toLocaleDateString('fr-FR', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+    });
 
-    const message = `Bonjour, je souhaite réserver la prestation "${selectedService.name}"${priceSegment} le ${dateFormatted} à ${bookingTime} au nom de ${visitorName}. Merci !`;
+    const itemsList = cart
+      .map((item) => {
+        const label = item.itemLabel ? `${item.serviceName} — ${item.itemLabel}` : item.serviceName;
+        const priceLabel = item.price ? formatCurrency(item.price) : 'sur devis';
+        return `- ${label} (${priceLabel})`;
+      })
+      .join('\n');
+
+    const totalLine = hasQuoteOnlyItems
+      ? `Total (hors prestations sur devis) : ${formatCurrency(cartTotal)}`
+      : `Total : ${formatCurrency(cartTotal)}`;
+
+    const message = `Bonjour, je souhaite réserver les prestations suivantes :\n${itemsList}\n${totalLine}\nDate souhaitée : ${dateFormatted} à ${bookingTime}\nNom : ${visitorName}\nMerci !`;
+
     const whatsappUrl = `https://wa.me/${settings.phone}?text=${encodeURIComponent(message)}`;
-
     window.open(whatsappUrl, '_blank');
     setIsSubmitted(true);
+  };
+
+  const handleStartNewSelection = () => {
+    setCart([]);
+    setIsCartOpen(false);
+    setIsSubmitted(false);
+    setVisitorName('');
+    setBookingDate('');
+    setBookingTime('');
   };
 
   return (
@@ -131,7 +216,7 @@ export default function Services({ services, settings }) {
           </h2>
           <div className="w-16 h-1 bg-salon-gold mx-auto rounded-full"></div>
           <p className="text-salon-text font-light">
-            Parcourez notre carte de soins et réservez votre moment privilégié en quelques clics.
+            Sélectionnez une ou plusieurs prestations — et plusieurs options si besoin — puis envoyez votre demande en un clic.
           </p>
         </div>
 
@@ -154,11 +239,16 @@ export default function Services({ services, settings }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredServices.map((service) => {
             const style = CATEGORY_STYLES[service.category] || DEFAULT_CATEGORY_STYLE;
+            const selectedCount = countInCart(service.id);
             return (
               <div
                 key={service.id}
                 onClick={() => handleOpenDetail(service)}
-                className="bg-white rounded-2xl overflow-hidden border border-salon-lightAccent shadow-sm hover:shadow-lg hover:border-salon-gold/30 transition-all flex flex-col h-full group cursor-pointer"
+                className={`bg-white rounded-2xl overflow-hidden border shadow-sm hover:shadow-lg transition-all flex flex-col h-full group cursor-pointer ${
+                  selectedCount > 0
+                    ? 'border-salon-gold ring-1 ring-salon-gold/40'
+                    : 'border-salon-lightAccent hover:border-salon-gold/30'
+                }`}
               >
                 <div className="relative aspect-square overflow-hidden bg-salon-softBg">
                   <img
@@ -172,6 +262,12 @@ export default function Services({ services, settings }) {
                   {service.variants && (
                     <span className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-semibold text-white">
                       {service.variants.length} options
+                    </span>
+                  )}
+                  {selectedCount > 0 && (
+                    <span className="absolute top-3 left-3 bg-salon-gold px-2.5 py-1 rounded-full text-[10px] font-bold text-white flex items-center gap-1">
+                      <Check className="w-3 h-3" />
+                      {selectedCount} sélectionné{selectedCount > 1 ? 's' : ''}
                     </span>
                   )}
                 </div>
@@ -210,6 +306,22 @@ export default function Services({ services, settings }) {
 
       </div>
 
+      {/* Bouton flottant : panier de sélection */}
+      {cart.length > 0 && !isCartOpen && !detailService && (
+        <button
+          onClick={handleOpenCart}
+          className="fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 bg-primary-900 hover:bg-salon-accent text-white pl-4 pr-5 py-3 rounded-full shadow-xl transition-all focus:outline-none"
+        >
+          <span className="relative">
+            <ShoppingBag className="w-5 h-5" />
+            <span className="absolute -top-2 -right-2 bg-salon-gold text-primary-900 text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+              {cart.length}
+            </span>
+          </span>
+          <span className="text-sm font-semibold">Ma sélection</span>
+        </button>
+      )}
+
       {/* Detail Modal */}
       {detailService && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -242,149 +354,221 @@ export default function Services({ services, settings }) {
                 {detailService.description}
               </p>
 
-              {detailService.variants && (
+              {detailService.variants ? (
                 <div className="space-y-2">
-                  <p className="text-xs font-bold text-salon-text uppercase tracking-wider">Choisissez une option</p>
-                  <div className="flex flex-col gap-2">
-                    {detailService.variants.map((variant, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setSelectedVariantIndex(idx)}
-                        className={`text-left p-3 rounded-xl border transition-all flex items-center justify-between gap-3 focus:outline-none ${
-                          selectedVariantIndex === idx
-                            ? 'border-salon-gold bg-salon-softBg'
-                            : 'border-salon-lightAccent hover:border-salon-gold/50'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <span className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${selectedVariantIndex === idx ? 'border-salon-gold bg-salon-gold' : 'border-salon-lightAccent'}`}>
-                            {selectedVariantIndex === idx && <Check className="w-3 h-3 text-white" />}
-                          </span>
-                          <span className="text-sm font-semibold text-primary-900">{variant.name}</span>
-                        </div>
-                        <span className="text-sm font-serif font-bold text-primary-900 whitespace-nowrap">
-                          {formatCurrency(variant.price)}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                  <p className="text-xs text-salon-text/70 italic pt-1">
-                    {detailService.variants[selectedVariantIndex].description}
+                  <p className="text-xs font-bold text-salon-text uppercase tracking-wider">
+                    Cochez une ou plusieurs options
                   </p>
+                  <div className="flex flex-col gap-2">
+                    {detailService.variants.map((variant, idx) => {
+                      const key = getItemKey(detailService.id, idx);
+                      const checked = isInCart(key);
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => toggleVariant(detailService, idx)}
+                          className={`text-left p-3 rounded-xl border transition-all flex items-center justify-between gap-3 focus:outline-none ${
+                            checked
+                              ? 'border-salon-gold bg-salon-softBg'
+                              : 'border-salon-lightAccent hover:border-salon-gold/50'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className={`w-4 h-4 rounded-md border flex items-center justify-center shrink-0 ${checked ? 'border-salon-gold bg-salon-gold' : 'border-salon-lightAccent'}`}>
+                              {checked && <Check className="w-3 h-3 text-white" />}
+                            </span>
+                            <span className="text-sm font-semibold text-primary-900">{variant.name}</span>
+                          </div>
+                          <span className="text-sm font-serif font-bold text-primary-900 whitespace-nowrap">
+                            {formatCurrency(variant.price)}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => toggleBaseService(detailService)}
+                  className={`w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between gap-3 focus:outline-none ${
+                    isInCart(getItemKey(detailService.id))
+                      ? 'border-salon-gold bg-salon-softBg'
+                      : 'border-salon-lightAccent hover:border-salon-gold/50'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className={`w-4 h-4 rounded-md border flex items-center justify-center shrink-0 ${isInCart(getItemKey(detailService.id)) ? 'border-salon-gold bg-salon-gold' : 'border-salon-lightAccent'}`}>
+                      {isInCart(getItemKey(detailService.id)) && <Check className="w-3 h-3 text-white" />}
+                    </span>
+                    <span className="text-sm font-semibold text-primary-900">Ajouter cette prestation à ma sélection</span>
+                  </div>
+                  <span className="text-sm font-serif font-bold text-primary-900 whitespace-nowrap">
+                    {formatCurrency(detailService.price)}
+                  </span>
+                </button>
+              )}
+
+              {detailService.duration && !detailService.variants && (
+                <div className="flex items-center gap-1.5 text-sm text-salon-accent font-semibold">
+                  <Clock className="w-4 h-4" />
+                  {detailService.duration} min
                 </div>
               )}
 
-              <div className="flex items-center justify-between pt-4 border-t border-salon-softBg">
-                <div className="flex items-center gap-1.5 text-sm text-salon-accent font-semibold">
-                  {(detailService.variants ? detailService.variants[selectedVariantIndex].duration : detailService.duration) ? (
-                    <>
-                      <Clock className="w-4 h-4" />
-                      {(detailService.variants ? detailService.variants[selectedVariantIndex].duration : detailService.duration)} min
-                    </>
-                  ) : (
-                    <span className="text-salon-text/60 italic">Durée sur devis</span>
-                  )}
-                </div>
-                <div className="text-2xl font-serif font-bold text-primary-900">
-                  {formatCurrency(detailService.variants ? detailService.variants[selectedVariantIndex].price : detailService.price)}
-                </div>
+              <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                <button
+                  onClick={handleCloseDetail}
+                  className="flex-1 inline-flex items-center justify-center gap-2 bg-salon-softBg hover:bg-salon-lightAccent text-primary-900 py-3 rounded-xl text-sm font-semibold transition-all focus:outline-none"
+                >
+                  Continuer à parcourir
+                </button>
+                <button
+                  onClick={handleOpenCart}
+                  disabled={cart.length === 0}
+                  className="flex-1 inline-flex items-center justify-center gap-2 bg-primary-900 hover:bg-salon-accent disabled:opacity-40 disabled:cursor-not-allowed text-white py-3 rounded-xl text-sm font-semibold shadow-md transition-all focus:outline-none"
+                >
+                  <ShoppingBag className="w-4 h-4" />
+                  Voir ma sélection ({cart.length})
+                </button>
               </div>
-
-              <button
-                onClick={handleBookFromDetail}
-                className="w-full inline-flex items-center justify-center gap-2 bg-primary-900 hover:bg-salon-accent text-white py-3 rounded-xl font-semibold shadow-md transition-all focus:outline-none"
-              >
-                <Phone className="w-4 h-4" />
-                Réserver via WhatsApp
-              </button>
             </div>
 
           </div>
         </div>
       )}
 
-      {/* Booking Modal */}
-      {selectedService && (
+      {/* Cart / Booking Modal */}
+      {isCartOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative border border-salon-lightAccent">
+          <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative border border-salon-lightAccent max-h-[90vh] overflow-y-auto">
 
             <button
-              onClick={handleCloseBooking}
-              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-salon-softBg text-salon-accent transition-colors focus:outline-none"
+              onClick={handleCloseCart}
+              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-salon-softBg text-salon-accent transition-colors focus:outline-none z-10"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="bg-salon-softBg p-6 border-b border-salon-lightAccent">
-              <span className="text-xs font-bold text-salon-gold uppercase tracking-widest">Réservation Express</span>
+              <span className="text-xs font-bold text-salon-gold uppercase tracking-widest">Ma sélection</span>
               <h3 className="text-xl font-bold font-serif text-primary-900 mt-1 mb-0">
-                {selectedService.name}
+                {cart.length} prestation{cart.length > 1 ? 's' : ''} choisie{cart.length > 1 ? 's' : ''}
               </h3>
-              <p className="text-xs text-salon-accent mt-1">
-                {selectedService.duration ? `${selectedService.duration} min — ` : ''}{formatCurrency(selectedService.price)}
-              </p>
             </div>
 
-            <div className="p-6">
+            <div className="p-6 space-y-5">
+
               {!isSubmitted ? (
-                <form onSubmit={handleFormSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-bold text-salon-text uppercase tracking-wider mb-1.5">
-                      Votre Nom & Prénom
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Ex: Hilary Cole"
-                      value={visitorName}
-                      onChange={(e) => setVisitorName(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-lg border border-salon-lightAccent focus:border-salon-gold focus:outline-none text-sm transition-colors"
-                    />
-                  </div>
+                <>
+                  {cart.length === 0 ? (
+                    <p className="text-sm text-salon-text/70 italic text-center py-4">
+                      Votre sélection est vide. Ouvrez une fiche prestation pour ajouter des options.
+                    </p>
+                  ) : (
+                    <ul className="divide-y divide-salon-lightAccent/70">
+                      {cart.map((item) => (
+                        <li key={item.key} className="py-3 flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-sm font-semibold text-primary-900 mt-0">
+                              {item.serviceName}
+                            </p>
+                            {item.itemLabel && (
+                              <p className="text-xs text-salon-text/70">{item.itemLabel}</p>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span className="text-sm font-serif font-bold text-primary-900 whitespace-nowrap">
+                              {formatCurrency(item.price)}
+                            </span>
+                            <button
+                              onClick={() => removeFromCart(item.key)}
+                              className="p-1.5 rounded-full hover:bg-salon-softBg text-salon-text/50 hover:text-salon-accent transition-colors focus:outline-none"
+                              aria-label="Retirer"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-bold text-salon-text uppercase tracking-wider mb-1.5">
-                        Date Souhaitée
-                      </label>
-                      <input
-                        type="date"
-                        required
-                        value={bookingDate}
-                        onChange={(e) => setBookingDate(e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-salon-lightAccent focus:border-salon-gold focus:outline-none text-sm transition-colors"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-salon-text uppercase tracking-wider mb-1.5">
-                        Heure Souhaitée
-                      </label>
-                      <input
-                        type="time"
-                        required
-                        value={bookingTime}
-                        onChange={(e) => setBookingTime(e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-salon-lightAccent focus:border-salon-gold focus:outline-none text-sm transition-colors"
-                      />
-                    </div>
-                  </div>
+                  {cart.length > 0 && (
+                    <>
+                      <div className="flex items-center justify-between pt-2 border-t border-salon-softBg">
+                        <span className="text-sm font-semibold text-salon-text">
+                          {hasQuoteOnlyItems ? 'Total (hors soins sur devis)' : 'Total'}
+                        </span>
+                        <span className="text-xl font-serif font-bold text-primary-900">
+                          {formatCurrency(cartTotal)}
+                        </span>
+                      </div>
 
-                  <div className="p-4 bg-amber-50 rounded-xl border border-amber-200 flex items-start gap-3">
-                    <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-                    <div className="text-xs text-amber-800 space-y-1">
-                      <p className="font-semibold">Réservation en attente de confirmation</p>
-                      <p className="font-light">En cliquant sur le bouton, vous serez redirigé vers WhatsApp pour envoyer la demande. Le salon devra confirmer manuellement votre créneau{selectedService.price ? '' : ' et vous communiquer le tarif'}.</p>
-                    </div>
-                  </div>
+                      <form onSubmit={handleFormSubmit} className="space-y-4 pt-2">
+                        <div>
+                          <label className="block text-xs font-bold text-salon-text uppercase tracking-wider mb-1.5">
+                            Votre Nom & Prénom
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="Ex: Hilary Cole"
+                            value={visitorName}
+                            onChange={(e) => setVisitorName(e.target.value)}
+                            className="w-full px-4 py-2.5 rounded-lg border border-salon-lightAccent focus:border-salon-gold focus:outline-none text-sm transition-colors"
+                          />
+                        </div>
 
-                  <button
-                    type="submit"
-                    className="w-full bg-primary-900 hover:bg-salon-accent text-white py-3 rounded-xl font-semibold shadow-md transition-all flex items-center justify-center gap-2 focus:outline-none"
-                  >
-                    <Phone className="w-4 h-4" />
-                    Envoyer sur WhatsApp
-                  </button>
-                </form>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-bold text-salon-text uppercase tracking-wider mb-1.5">
+                              Date Souhaitée
+                            </label>
+                            <input
+                              type="date"
+                              required
+                              value={bookingDate}
+                              onChange={(e) => setBookingDate(e.target.value)}
+                              className="w-full px-4 py-2.5 rounded-lg border border-salon-lightAccent focus:border-salon-gold focus:outline-none text-sm transition-colors"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-salon-text uppercase tracking-wider mb-1.5">
+                              Heure Souhaitée
+                            </label>
+                            <input
+                              type="time"
+                              required
+                              value={bookingTime}
+                              onChange={(e) => setBookingTime(e.target.value)}
+                              className="w-full px-4 py-2.5 rounded-lg border border-salon-lightAccent focus:border-salon-gold focus:outline-none text-sm transition-colors"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="p-4 bg-amber-50 rounded-xl border border-amber-200 flex items-start gap-3">
+                          <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                          <div className="text-xs text-amber-800 space-y-1">
+                            <p className="font-semibold">Réservation en attente de confirmation</p>
+                            <p className="font-light">
+                              En cliquant sur le bouton, vous serez redirigé vers WhatsApp pour envoyer votre demande avec toute votre sélection. Le salon devra confirmer manuellement votre créneau{hasQuoteOnlyItems ? ' et vous communiquer le tarif des soins sur devis' : ''}.
+                            </p>
+                          </div>
+                        </div>
+
+                        <button
+                          type="submit"
+                          className="w-full bg-primary-900 hover:bg-salon-accent text-white py-3 rounded-xl font-semibold shadow-md transition-all flex items-center justify-center gap-2 focus:outline-none"
+                        >
+                          <Phone className="w-4 h-4" />
+                          Envoyer ma sélection sur WhatsApp
+                        </button>
+                      </form>
+                    </>
+                  )}
+                </>
               ) : (
                 <div className="text-center py-8 space-y-4">
                   <div className="w-16 h-16 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto border border-green-200 shadow-inner">
@@ -394,16 +578,16 @@ export default function Services({ services, settings }) {
                   </div>
                   <h4 className="text-lg font-serif font-bold text-primary-900">Demande envoyée !</h4>
                   <p className="text-sm text-salon-text font-light max-w-xs mx-auto">
-                    Votre message a été généré. Si la conversation WhatsApp ne s'est pas ouverte automatiquement, veuillez vérifier vos fenêtres pop-up.
+                    Votre message a été généré avec toute votre sélection. Si la conversation WhatsApp ne s'est pas ouverte automatiquement, veuillez vérifier vos fenêtres pop-up.
                   </p>
                   <p className="text-xs text-salon-accent italic">
                     Statut : En attente de confirmation par l'esthéticienne.
                   </p>
                   <button
-                    onClick={handleCloseBooking}
+                    onClick={handleStartNewSelection}
                     className="mt-4 px-6 py-2 border border-salon-lightAccent hover:bg-salon-softBg text-salon-text rounded-lg text-sm font-semibold transition-all focus:outline-none"
                   >
-                    Fermer la fenêtre
+                    Nouvelle sélection
                   </button>
                 </div>
               )}
