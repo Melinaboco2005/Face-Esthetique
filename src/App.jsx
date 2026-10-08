@@ -3,10 +3,14 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
 import Services from './components/Services';
+import Offers, { OffersBanner } from './components/Offers';
+import CartModal from './components/CartModal';
+import OffersPopup from './components/OffersPopup';
 import Formations from './components/Formations';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import AdminDashboard from './components/AdminDashboard';
+import { CartProvider } from './context/CartContext';
 import { initialServices, initialFaq, initialSettings, servicesVersion } from './mockData';
 
 export default function App() {
@@ -78,66 +82,75 @@ export default function App() {
   };
 
   return (
+    <CartProvider>
+      <div className="min-h-screen bg-salon-beige font-sans text-salon-text flex flex-col justify-between">
 
-    <div className="min-h-screen bg-salon-beige font-sans text-salon-text flex flex-col justify-between">
-
-      {/* Navigation */}
-      <Navbar
-        onNavigate={handleNavigate}
-        currentTab={currentTab}
-        settings={settings}
-      />
-
-      {/* Main View Switcher */}
-      {currentTab === 'admin' ? (
-        <AdminDashboard
-          services={services}
-          onUpdateServices={setServices}
-          faqList={faqList}
-          onUpdateFaq={setFaqList}
+        {/* Navigation */}
+        <Navbar
+          onNavigate={handleNavigate}
+          currentTab={currentTab}
           settings={settings}
-          onUpdateSettings={setSettings}
-          onClose={() => handleNavigate('home')}
         />
-      ) : (
-        <main className="flex-grow">
-          <Hero settings={settings} />
-          <About />
-          <Formations/>
-          <Services services={services} settings={settings} />
-          <FAQ faqList={faqList} onAddQuestion={handleAddQuestion} />
-          <Contact settings={settings} />
-        </main>
-      )}
 
-      {/* Footer */}
-      <footer className="bg-primary-900 text-white py-12 px-4 border-t border-primary-800">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
-          <div>
-            <h3 className="font-serif text-xl font-bold tracking-widest text-white my-0">
-              {settings.salonName.toUpperCase()}
-            </h3>
-            <p className="text-xs text-salon-rose/80 font-light mt-1">
-              Make Up, Soins & Beauté
-            </p>
+        {/* Main View Switcher */}
+        {currentTab === 'admin' ? (
+          <AdminDashboard
+            services={services}
+            onUpdateServices={setServices}
+            faqList={faqList}
+            onUpdateFaq={setFaqList}
+            settings={settings}
+            onUpdateSettings={setSettings}
+            onClose={() => handleNavigate('home')}
+          />
+        ) : (
+          <main className="flex-grow">
+            <Hero settings={settings} />
+            <OffersBanner />
+            <About />
+            <Formations/>
+            <Offers />
+            <Services services={services} />
+            <FAQ faqList={faqList} onAddQuestion={handleAddQuestion} />
+            <Contact settings={settings} />
+          </main>
+        )}
+
+        {/* Panier : bouton flottant + fenêtre de réservation (site public uniquement) */}
+        {currentTab !== 'admin' && <CartModal settings={settings} />}
+
+        {/* Annonce des offres à l'arrivée sur le site (une fois par visite) */}
+        {currentTab !== 'admin' && <OffersPopup />}
+
+        {/* Footer */}
+        <footer className="bg-primary-900 text-white py-12 px-4 border-t border-primary-800">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+            <div>
+              <h3 className="font-serif text-xl font-bold tracking-widest text-white my-0">
+                {settings.salonName.toUpperCase()}
+              </h3>
+              <p className="text-xs text-salon-rose/80 font-light mt-1">
+                Make Up, Soins & Beauté
+              </p>
+            </div>
+
+            <div className="text-xs text-white/70 font-light space-y-1">
+              <p>© 2026 {settings.salonName}. Tous droits réservés.</p>
+            </div>
+
+            <div>
+              <button
+                onClick={() => handleNavigate('admin')}
+                className="text-xs text-salon-gold hover:underline font-semibold focus:outline-none"
+              >
+                Accès Éditeur / Admin
+              </button>
+            </div>
           </div>
+        </footer>
 
-          <div className="text-xs text-white/70 font-light space-y-1">
-            <p>© 2026 {settings.salonName}. Tous droits réservés.</p>
-          </div>
-
-          <div>
-            <button
-              onClick={() => handleNavigate('admin')}
-              className="text-xs text-salon-gold hover:underline font-semibold focus:outline-none"
-            >
-              Accès Éditeur / Admin
-            </button>
-          </div>
-        </div>
-      </footer>
-
-    </div>
+      </div>
+    </CartProvider>
   );
 }
-
+ 

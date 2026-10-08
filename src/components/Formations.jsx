@@ -217,10 +217,6 @@ export default function FormationsComplete() {
             >
               🎓 PRENDRE RENDEZ-VOUS POUR PLUS D'INFORMATIONS
             </a>
-            <div className="bg-white border-2 border-salon-gold rounded-full px-8 py-4 text-center space-y-1">
-              <div className="flex items-center justify-center gap-2 text-primary-900 font-bold">
-              </div>
-            </div>
           </div>
         </div>
 
