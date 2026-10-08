@@ -4,7 +4,7 @@
 // ou une description dans initialServices. Cela force tous les navigateurs
 // (le vôtre et ceux de vos visiteurs) à recharger les données à jour au lieu
 // de garder leur ancienne copie enregistrée dans le localStorage.
-export const servicesVersion = '2026-09-17-1';
+export const servicesVersion = '2026-10-08-2';
 
 export const initialSettings = {
   salonName: "Face Esthétique",
@@ -207,6 +207,70 @@ export const initialServices = [
     price: null,
     duration: null,
     description: "Ouvre les pores, élimine les toxines, active la circulation et prépare le corps avant un soin corporel, pour des résultats optimisés."
+  },
+
+  // À copier dans le tableau `initialServices` de mockData.js (chaque objet séparé par une virgule).
+//
+// - price: null  => le site affiche "Sur devis" et la mention est ajoutée dans le message WhatsApp.
+//   Remplacez null par le vrai tarif dès que vous l'avez (ex: price: 15000).
+// - image : mettez les flyers dans public/images/services/ avec ces noms,
+//   ou adaptez les chemins ci-dessous.
+// - category : on réutilise les catégories existantes ('corps', 'soins-beaute').
+
+
+  {
+    id: 'onglerie',
+    name: 'Onglerie',
+    category: 'soins-beaute',
+    description:
+      'Des mains et des pieds soignés jusque dans les moindres détails. Chaque pose est réalisée avec précision, hygiène et passion pour un résultat élégant, durable et à votre image.',
+    image:"/images/onglerie-card.jpg",
+    variants: [
+      { name: 'Pose complète gel', price: null },
+      { name: 'Pose américaine (chablon)', price: null },
+      { name: 'Remplissage gel', price: null },
+      { name: 'Gainage ongles naturels', price: null },
+      { name: 'Nail art personnalisé', price: null },
+      { name: 'Manucure & pédicure spa', price: null },
+    ],
+  },
+  {
+    id: 'lipocavitation',
+    name: 'Lipocavitation',
+    category: 'corps',
+    description:
+      'Technique non invasive qui cible et élimine les amas graisseux localisés grâce aux ultrasons. Elle sculpte le corps, affine la silhouette et raffermit la peau, sans chirurgie ni douleur. Zones traitées : ventre, hanches, cuisses, bras, dos et taille. Idéal pour les hommes et les femmes.',
+    image: "/images/lipocavitation-card.jpg", 
+    variants: [
+      { name: 'Pack Découverte — 5 séances', price: 80000 },
+      { name: 'Pack Performance — 10 séances (le plus choisi)', price: 150000 },
+      { name: 'Pack Transformation — 15 séances', price: 220000 },
+    ],
+  },
+  {
+    id: 'make-up-professionnel',
+    name: 'Make up professionnel',
+    category: 'soins-beaute',
+    description:
+      'Un maquillage adapté à votre personnalité, à l\'occasion et à votre carnation : teint parfait, regard sublimé, lèvres définies et tenue longue durée. Pour mariages, soirées, shootings, anniversaires et cérémonies.',
+    image: "/images/make-up-attache-foulard-card.jpg",
+    price: null,
+  },
+  {
+    id: 'attache-foulard',
+    name: 'Attache foulard',
+    category: 'soins-beaute',
+    description:
+      'Des attaches élégantes, modernes et traditionnelles, légères, soignées et qui tiennent bien. Pour mariages, cérémonies, baptêmes, travail et sorties.',
+    image: "/images/make-up-attache-foulard-card.jpg",
+    variants: [
+      { name: 'Classique', price: null },
+      { name: 'Turban', price: null },
+      { name: 'Chic & Volume', price: null },
+      { name: 'Cérémonie', price: null },
+      { name: 'Moderne', price: null },
+      { name: 'Simple & Élégant', price: null },
+    ],
   },
 
 ];
